@@ -3,21 +3,9 @@ package main;
 import inputs.KeyboardInputs;
 import inputs.MouseInputs;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
 
-import static utils.Constants.Directions.*;
-import static utils.Constants.PlayerActions.IDLE;
-import static utils.Constants.PlayerActions.RUNNING;
 
 
 public class GamePanel extends JPanel {
@@ -44,14 +32,9 @@ public class GamePanel extends JPanel {
         setPreferredSize(size);
     }
 
-    public void updateGame() {
-
-    }
-
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         game.render(g);
-
 
     }
 
