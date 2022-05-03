@@ -2,9 +2,6 @@ package entities;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
 
 import utils.LoadSave;
@@ -21,13 +18,11 @@ public class Player extends Entity {
 
     private boolean quickAttacking = false, strongAttacking = false;
 
-    private float playerSpeed = 2.0f;
-
     private int aniTick;
     private int aniIndex;
 
-    public Player(float x, float y) {
-        super(x, y);
+    public Player(float x, float y, int width, int height ) {
+        super(x, y, width, height);
         loadAnimation();
     }
 
@@ -40,7 +35,7 @@ public class Player extends Entity {
     public void render(Graphics g) {
         System.out.println();
         g.drawImage(playerAnimations[animationMap.get("Captain Clown Nose with Sword")][playerAction][aniIndex],
-                (int) x, (int) y, 256, 160, null);
+                (int) x, (int) y, width, height, null);
     }
 
     private void updateAnimationTick() {
@@ -59,7 +54,6 @@ public class Player extends Entity {
 
     private void setAnimation() {
         int startAni = playerAction;
-
         if (moving)
             playerAction = RUNNING;
         else
@@ -83,20 +77,21 @@ public class Player extends Entity {
     private void updatePos() {
         moving = false;
 
+        float playerSpeed = 2.0f;
         if (left && !right){
-            x-=playerSpeed;
+            x-= playerSpeed;
             moving = true;
         }
         else if (!left && right){
-            x+=playerSpeed;
+            x+= playerSpeed;
             moving = true;
         }
 
         if(up && !down){
-            y-=playerSpeed;
+            y-= playerSpeed;
             moving = true;
         } else if (down && !up){
-            y+=playerSpeed;
+            y+= playerSpeed;
             moving = true;
         }
 
@@ -106,9 +101,6 @@ public class Player extends Entity {
         playerAnimations = LoadSave.GetSprites(LoadSave.PLAYER_SPRITES);
         animationMap = LoadSave.mapIndices(LoadSave.PLAYER_SPRITES);
     }
-
-    // TODO: 2022-05-03 put this method into LoadSave as well to return a map collection of indices.
-
 
     public boolean isLeft() {
         return left;

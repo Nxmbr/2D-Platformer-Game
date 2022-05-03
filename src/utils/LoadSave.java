@@ -1,6 +1,9 @@
 package utils;
 
+import main.Game;
+
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,6 +17,8 @@ import java.util.HashMap;
 public class LoadSave {
 
     public static final String PLAYER_SPRITES = "res/Player";
+    public static final String LEVEL_ATLAS = "res/Level";
+
 
     public static BufferedImage[][][] GetSprites (String root){
         try {
@@ -39,6 +44,25 @@ public class LoadSave {
         }
     }
 
+    private static BufferedImage GetPlayerSprites(String name) {
+        InputStream is;
+        try {
+            is = new FileInputStream(name);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            return ImageIO.read(is);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     public static HashMap mapIndices(String filePath) {
         HashMap<String, Integer> animationMap = new HashMap<>();
         String[] fileArray;
@@ -70,24 +94,19 @@ public class LoadSave {
 
     }
 
-    private static BufferedImage GetPlayerSprites(String name) {
-        InputStream is;
-        try {
-            is = new FileInputStream(name);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            return ImageIO.read(is);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+    public static int[][] GetLevelData() {
+        int[][] lvlData = new int[Game.TILES_IN_HEIGHT][Game.TILES_IN_WIDTH];
+        BufferedImage img = GetSprites(LEVEL_ATLAS)[0][3][0];
+
+        for (int j = 0; j < img.getHeight(); j++){
+            for (int i = 0; i < img.getWidth(); i++){
+                Color color = new Color((img.getRGB(i, j)));
+                int value = color.getRed();
+                if (value >= 48)
+                    value = 0;
+                lvlData[j][i] = value;
             }
         }
+        return lvlData;
     }
-
 }
