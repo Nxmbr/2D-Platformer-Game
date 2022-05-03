@@ -39,6 +39,37 @@ public class LoadSave {
         }
     }
 
+    public static HashMap mapIndices(String filePath) {
+        HashMap<String, Integer> animationMap = new HashMap<>();
+        String[] fileArray;
+        try {
+            fileArray = Files.list(Path.of(filePath))
+                    .map(path1 -> {
+                        try {
+                            String[] namesArray = Files.list(path1)
+                                    .map(Path::getFileName)
+                                    .map(Path::toString)
+                                    .toArray(String[]::new);
+                            for (int j = 0; j < namesArray.length; j++) {
+                                animationMap.put(namesArray[j], j);
+                            }
+                            return path1;
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }).map(Path::getFileName)
+                    .map(Path::toString)
+                    .toArray(String[]::new);
+            for (int j = 0; j < fileArray.length; j++) {
+                animationMap.put(fileArray[j], j);
+            }
+            return animationMap;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     private static BufferedImage GetPlayerSprites(String name) {
         InputStream is;
         try {

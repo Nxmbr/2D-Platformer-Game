@@ -29,7 +29,6 @@ public class Player extends Entity {
     public Player(float x, float y) {
         super(x, y);
         loadAnimation();
-        mapIndices();
     }
 
     public void update() {
@@ -59,7 +58,6 @@ public class Player extends Entity {
     }
 
     private void setAnimation() {
-
         int startAni = playerAction;
 
         if (moving)
@@ -106,38 +104,11 @@ public class Player extends Entity {
 
     private void loadAnimation() {
         playerAnimations = LoadSave.GetSprites(LoadSave.PLAYER_SPRITES);
+        animationMap = LoadSave.mapIndices(LoadSave.PLAYER_SPRITES);
     }
 
-    private void mapIndices() {
-        animationMap = new HashMap<>();
-        String[] fileArray;
-        try {
-            fileArray = Files.list(Path.of("res"))
-                    .map(path1 -> {
-                        try {
-                            String[] namesArray = Files.list(path1)
-                                    .map(Path::getFileName)
-                                    .map(Path::toString)
-                                    .toArray(String[]::new);
-                            for (int j = 0; j < namesArray.length; j++) {
-                                animationMap.put(namesArray[j], j);
-                            }
-                            return path1;
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }).map(Path::getFileName)
-                    .map(Path::toString)
-                    .toArray(String[]::new);
-            for (int j = 0; j < fileArray.length; j++) {
-                animationMap.put(fileArray[j], j);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(fileArray[0]);
-        System.out.println(animationMap);
-    }
+    // TODO: 2022-05-03 put this method into LoadSave as well to return a map collection of indices.
+
 
     public boolean isLeft() {
         return left;
