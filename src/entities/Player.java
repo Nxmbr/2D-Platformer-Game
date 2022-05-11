@@ -12,37 +12,38 @@ import static utils.HelpMethods.*;
 
 public class Player extends Entity {
 
-    private BufferedImage[][][] playerAnimations;
-    private HashMap<String, Integer> animationMap;
     private int playerAction = IDLE;
-
-    private boolean left,right, jump;
-    private boolean moving = false;
-
     private boolean quickAttacking = false, strongAttacking = false;
 
+    // Player movement
+    private boolean left,right, jump;
+    private boolean moving = false;
+    private float xSpeed = 0;
+    private float playerSpeed = 1.0f * Game.SCALE;
+    //   Jumping/Gravity
+    private float airSpeed = 0f;
+    private float gravity = 0.04f * Game.SCALE;
+    private float jumpSpeed = -2.25f * Game.SCALE;
+    private float fallSpeedAfterCollision = 0.5f*Game.SCALE;
+    private boolean inAir = false;
+
+    // Player animations
+    private BufferedImage[][][] playerAnimations;
+    private HashMap<String, Integer> animationMap;
+    private int aniSpeed = 15;
     private int aniTick;
     private int aniIndex;
-
     private int[][] lvlData;
-
     private float xDrawOffset = 21 * Game.SCALE;
     private float yDrawOffset = 4 * Game.SCALE;
 
 
-    // Jumping/Gravity
-    private float airSpeed = 0f;
-    private float gravity = 0.04f * Game.SCALE;
-
-    private float jumpSpeed = -2.25f *Game.SCALE;
-    private float fallSpeedAfterCollision = 0.5f*Game.SCALE;
-    private boolean inAir = false;
 
 
     public Player(float x, float y, int width, int height ) {
         super(x, y, width, height);
         loadAnimation();
-        initHitbox(x,y,20*Game.SCALE, 27*Game.SCALE);
+        initHitbox(x, y, (int)(20*Game.SCALE), (int)(27*Game.SCALE));
     }
 
     public void update() {
@@ -60,7 +61,6 @@ public class Player extends Entity {
 
     private void updateAnimationTick() {
         aniTick++;
-        int aniSpeed = 15;
         if (aniTick >= aniSpeed) {
             aniTick = 0;
             aniIndex++;
@@ -108,8 +108,7 @@ public class Player extends Entity {
         if (!left && !right && !inAir)
             return;
 
-        float xSpeed = 0, ySpeed = 0;
-        float playerSpeed = 2.0f;
+        xSpeed = 0;
 
         if (left)
             xSpeed -= playerSpeed;

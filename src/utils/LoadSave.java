@@ -18,6 +18,7 @@ public class LoadSave {
 
     public static final String PLAYER_SPRITES = "res/Player";
     public static final String LEVEL_ATLAS = "res/Level";
+    public static final String MENU = "res/Menu";
 
 
     public static BufferedImage[][][] GetSprites (String root){
